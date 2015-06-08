@@ -1,0 +1,11 @@
+From kradalby@kradalby.no  Thu Nov 13 17:47:20 2014
+Return-Path: <kradalby@kradalby.no>
+X-Original-To: test@invalid.no
+From: Kristoffer Dalby <kradalby@kradalby.no>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Subject: test
+Date: Thu, 13 Nov 2014 17:15:27 +0100
+To: test@invalid.no
+
+test

@@ -14,7 +14,11 @@ clean:
 	rm -rf *.egg-info
 
 test:
-	$(ENV)/python setup.py test
+	$(ENV)/pip install -r requirements/test.txt --upgrade
+	$(ENV)/flake8 mailpimp.py
+	$(ENV)/coverage report --fail-under=20
+	$(ENV)/nosetests
+
 
 run:
 	$(ENV)/python 
