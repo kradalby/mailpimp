@@ -1,7 +1,6 @@
 image: python3.4
 script:
     - make env
-    - make dev
     - make test
 notify:
     email:

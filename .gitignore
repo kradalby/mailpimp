@@ -1,4 +1,5 @@
-# Created by https://www.gitignore.io
+config.ini
+lists.mp
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
