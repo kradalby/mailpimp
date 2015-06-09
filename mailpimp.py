@@ -7,6 +7,7 @@ import logging
 import configparser
 
 from list import ListManager
+from mailgun import MailGun
 
 logging.basicConfig(filename="/var/log/mailpimp.log", level=logging.DEBUG)
 logger = logging.getLogger('MailPimp')
@@ -18,7 +19,10 @@ class MailPimp():
     def __init__(self, sender, recipient, mail):
         self.config = configparser.ConfigParser()
         self.config.read(CONFIG_FILE)
+
+        self.mg = MailGun(self.config["mailgun"]["url"], self.config["mailgun"]["key"])
         self.lm = ListManager(self.config["list"]["list_file"])
+
         logger.debug(self.lm.get_lists())
 
         self.sender = sender
@@ -35,6 +39,14 @@ class MailPimp():
         if self.allowed():
             logger.info("Sender %s, is authorized to send to %s" %
                         (self.sender, self.recipient))
+            list = self.lm.get_list(self.recipient)
+            response =self.mg.send_message(
+                self.mail["From"], 
+                list.get_recipients(), 
+                self.mail["Subject"], 
+                self.mail.get_payload()
+            )
+            logger.debug(response)
         else:
             logger.info("Sender %s, is not authorized to send to %s" %
                         (self.sender, self.recipient))
@@ -43,6 +55,9 @@ class MailPimp():
 if __name__ == '__main__':
     try:
         mail = email.message_from_binary_file(sys.stdin.buffer)
+        logger.debug(dir(mail))
+        logger.debug(mail["From"])
+        logger.debug(mail.get_payload())
         sender = sys.argv[1]
         recipient = sys.argv[2]
 

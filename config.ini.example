@@ -1,2 +1,6 @@
 [list]
 list_file=/somewhere
+
+[mailgun]
+url=
+key=
