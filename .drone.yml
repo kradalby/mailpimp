@@ -1,4 +1,4 @@
-image: python3.4
+image: python3.3
 script:
     - make env
     - make test
