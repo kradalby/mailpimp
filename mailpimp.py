@@ -7,7 +7,7 @@ import logging
 import configparser
 
 from list import ListManager
-from mailgun import MailGun
+from mailgun import MailGunSMTP
 
 logging.basicConfig(filename="/var/log/mailpimp.log", level=logging.DEBUG)
 logger = logging.getLogger('MailPimp')
@@ -20,7 +20,8 @@ class MailPimp():
         self.config = configparser.ConfigParser()
         self.config.read(CONFIG_FILE)
 
-        self.mg = MailGun(self.config["mailgun"]["url"], self.config["mailgun"]["key"])
+        #self.mg = MailGun(self.config["mailgun"]["url"], self.config["mailgun"]["key"])
+        self.mg = MailGunSMTP(self.config["mailgun"]["user"], self.config["mailgun"]["password"])
         self.lm = ListManager(self.config["list"]["list_file"])
 
         logger.debug(self.lm.get_lists())
@@ -40,28 +41,46 @@ class MailPimp():
             logger.info("Sender %s, is authorized to send to %s" %
                         (self.sender, self.recipient))
             list = self.lm.get_list(self.recipient)
-            response =self.mg.send_message(
-                self.mail["From"], 
-                list.get_recipients(), 
-                self.mail["Subject"], 
-                self.mail.get_payload()
+            self.mg.send_message(
+                self.mail["From"],
+                list.get_recipients(),
+                self.mail
             )
-            logger.debug(response)
+
+            # Unused Mailgun HTTP code
+            #response = self.mg.send_message(
+            #    self.mail["From"], 
+            #    list.get_recipients(), 
+            #    self.mail["Subject"], 
+            #    self.mail.get_payload(),
+            #    self.get_attachments()
+            #)
+            #logger.debug(response)
+
         else:
             logger.info("Sender %s, is not authorized to send to %s" %
                         (self.sender, self.recipient))
+
+    def get_attachments(self):
+        files = []
+        if self.mail.is_multipart():
+            for file in self.mail.get_payload():
+                files.append((file.get_filename(), file.get_payload()))
+            return files
+        return files
 
 
 if __name__ == '__main__':
     try:
         mail = email.message_from_binary_file(sys.stdin.buffer)
-        logger.debug(dir(mail))
-        logger.debug(mail["From"])
-        logger.debug(mail.get_payload())
         sender = sys.argv[1]
         recipient = sys.argv[2]
 
-        logger.debug("To: %s, From: %s" % (recipient, sender))
+        logger.debug("######################")
+        logger.debug("To: %s" % recipient)
+        logger.debug("From: %s" % sender)
+        logger.debug("Subject: %s" % mail["Subject"])
+        logger.debug("######################\n")
 
         mp = MailPimp(sender, recipient, mail)
         mp.distribute()
