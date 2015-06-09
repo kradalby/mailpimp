@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 
 logging.basicConfig(filename="/var/log/mailpimp.log", level=logging.DEBUG)
