@@ -21,8 +21,10 @@ class MailPimp():
         self.config = configparser.ConfigParser()
         self.config.read(CONFIG_FILE)
 
-        #self.mg = MailGun(self.config["mailgun"]["url"], self.config["mailgun"]["key"])
-        self.mg = MailGunSMTP(self.config["mailgun"]["user"], self.config["mailgun"]["password"])
+        self.mg = MailGunSMTP(
+            self.config["mailgun"]["user"],
+            self.config["mailgun"]["password"]
+        )
         self.lm = ListManager(self.config["list"]["list_file"])
 
         logger.debug(self.lm.get_lists())
@@ -47,16 +49,6 @@ class MailPimp():
                 list.get_recipients(),
                 self.mail
             )
-
-            # Unused Mailgun HTTP code
-            #response = self.mg.send_message(
-            #    self.mail["From"], 
-            #    list.get_recipients(), 
-            #    self.mail["Subject"], 
-            #    self.mail.get_payload(),
-            #    self.get_attachments()
-            #)
-            #logger.debug(response)
 
         else:
             logger.info("Sender %s, is not authorized to send to %s" %
