@@ -12,6 +12,7 @@ env:
 clean:
 	find . -name "*.pyc" -exec rm -rf {} \;
 	rm -rf *.egg-info
+	rm -rf __pycache__
 
 test:
 	$(ENV)/pip install -r requirements/test.txt --upgrade
