@@ -3,3 +3,9 @@ list_file=/somewhere
 
 [log]
 file=./mailpimp.log
+
+[mailgun]
+url=
+key=
+user=
+password=

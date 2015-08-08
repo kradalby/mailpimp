@@ -20,6 +20,7 @@ lint: flake8
 clean:
 	find . -name "*.pyc" -exec rm -rf {} \;
 	rm -rf *.egg-info
+	rm -rf __pycache__
 
 test:
 	$(SETUP) test
