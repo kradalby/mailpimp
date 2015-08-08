@@ -3,6 +3,7 @@ import logging
 logging.basicConfig(filename='/var/log/mailpimp.log', level=logging.DEBUG)
 logger = logging.getLogger('MailPimpList')
 
+
 class ListManager():
     def __init__(self, list_file):
         self.lists = {}

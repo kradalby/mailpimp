@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-import email
-import sys
-import os
-import logging
 import configparser
+import email
+import logging
+import os
+import sys
 
 from list import ListManager
 
