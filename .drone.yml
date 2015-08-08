@@ -1,8 +1,15 @@
-image: python3.4
+# image: kradalby/python
+image: evonove/ci
+git:
+  path: github.com/kradalby/mailpimp
+
+env:
+
 script:
-    - make env
-    - make test
+    - pip install tox
+    - tox
+
 notify:
-    email:
-        recipients:
-            - kradalby@kradalby.no
+  email:
+    recipients:
+      - kradalby@kradalby.no

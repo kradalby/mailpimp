@@ -1,6 +1,6 @@
 import logging
 
-logging.basicConfig(filename="/var/log/mailpimp.log", level=logging.DEBUG)
+logging.basicConfig(filename='/var/log/mailpimp.log', level=logging.DEBUG)
 logger = logging.getLogger('MailPimpList')
 
 class ListManager():
@@ -11,7 +11,7 @@ class ListManager():
             for list_string in lists:
                 list = List(list_string)
                 self.lists[list.name] = list
-                logger.debug("Added list %s" % list.get_name())
+                logger.debug('Added list %s' % list.get_name())
 
     def get_list(self, name):
         if name in self.lists.keys():
@@ -24,9 +24,9 @@ class ListManager():
 
 class List():
     def __init__(self, list_string):
-        self.name = list_string.split(":")[0]
-        self.senders = list_string.split(":")[1].split(" ")
-        self.resipients = list_string.split(":")[2].split(" ")
+        self.name = list_string.split(':')[0]
+        self.senders = list_string.split(':')[1].split(' ')
+        self.resipients = list_string.split(':')[2].split(' ')
 
     def get_name(self):
         return self.name

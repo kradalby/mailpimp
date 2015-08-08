@@ -8,17 +8,17 @@ import configparser
 
 from list import ListManager
 
-logging.basicConfig(filename="/var/log/mailpimp.log", level=logging.DEBUG)
+logging.basicConfig(filename='/var/log/mailpimp.log', level=logging.DEBUG)
 logger = logging.getLogger('MailPimp')
 
-CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + "/" + "config.ini"
+CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + '/' + 'config.ini'
 
 
 class MailPimp():
     def __init__(self, sender, recipient, mail):
         self.config = configparser.ConfigParser()
         self.config.read(CONFIG_FILE)
-        self.lm = ListManager(self.config["list"]["list_file"])
+        self.lm = ListManager(self.config['list']['list_file'])
         logger.debug(self.lm.get_lists())
 
         self.sender = sender
@@ -33,10 +33,10 @@ class MailPimp():
 
     def distribute(self):
         if self.allowed():
-            logger.info("Sender %s, is authorized to send to %s" %
+            logger.info('Sender %s, is authorized to send to %s' %
                         (self.sender, self.recipient))
         else:
-            logger.info("Sender %s, is not authorized to send to %s" %
+            logger.info('Sender %s, is not authorized to send to %s' %
                         (self.sender, self.recipient))
 
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         sender = sys.argv[1]
         recipient = sys.argv[2]
 
-        logger.debug("To: %s, From: %s" % (recipient, sender))
+        logger.debug('To: %s, From: %s' % (recipient, sender))
 
         mp = MailPimp(sender, recipient, mail)
         mp.distribute()

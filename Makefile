@@ -1,27 +1,31 @@
 ENV=./env/bin
+PYTHON=$(ENV)/python
+PIP=$(ENV)/pip
+SETUP=$(PYTHON) setup.py
 
 dev: 
-	$(ENV)/pip install -r requirements/dev.txt --upgrade
+	$(PIP) install -r requirements/dev.txt --upgrade
 
 prod:
-	$(ENV)/pip install -r requirements/prod.txt --upgrade
+	$(PIP) install -r requirements/prod.txt --upgrade
 
 env:
 	virtualenv -p `which python3` env
+
+flake8:
+	flake8
+
+lint: flake8
 
 clean:
 	find . -name "*.pyc" -exec rm -rf {} \;
 	rm -rf *.egg-info
 
 test:
-	$(ENV)/pip install -r requirements/test.txt --upgrade
-	$(ENV)/flake8 mailpimp.py
-	$(ENV)/coverage report --fail-under=20
-	$(ENV)/nosetests
+	$(SETUP) test
 
-
-run:
-	$(ENV)/python 
+#run:
+#	$(PYTHON)
 
 freeze:
-	$(ENV)/pip freeze
+	$(PIP) freeze
