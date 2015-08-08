@@ -10,7 +10,7 @@ import sys
 from list import ListManager
 from mailgun import MailGunSMTP
 
-CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + '/' + 'config.ini'
+CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
