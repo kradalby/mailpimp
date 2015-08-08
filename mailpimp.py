@@ -8,10 +8,37 @@ import sys
 
 from list import ListManager
 
-logging.basicConfig(filename='/var/log/mailpimp.log', level=logging.DEBUG)
-logger = logging.getLogger('MailPimp')
-
 CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + '/' + 'config.ini'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join('mailpimp.log'),
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        '*': {
+            'handlers': ['file'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+    }
+}
+
+logger = logging.getLogger(__name__)
 
 
 class MailPimp():
@@ -19,6 +46,7 @@ class MailPimp():
         self.config = configparser.ConfigParser()
         self.config.read(CONFIG_FILE)
         self.lm = ListManager(self.config['list']['list_file'])
+        logging.basicConfig(filename=self.config['log']['file'], level=logging.DEBUG)
         logger.debug(self.lm.get_lists())
 
         self.sender = sender

@@ -1,46 +1,50 @@
-from list import List, ListManager
 import os
+import unittest
 
-TEST_LISTS = os.path.dirname(os.path.abspath(__file__)) + '/' + 'lists_test.mp'
+from list import ListManager
 
-def test_list_manager_creation():
-    lm = ListManager(TEST_LISTS)
-    assert(len(lm.lists) == 4)
+TEST_LISTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lists_test.mp')
 
-    l1 = lm.get_list('erp@example.com')
-    l2 = lm.get_list('derp@example.com')
 
-    assert(l1 == None)
-    assert(l2 != None)
+class ListManagerTests(unittest.TestCase):
+    def test_list_manager_creation(self):
+        lm = ListManager(TEST_LISTS)
+        self.assertEqual(len(lm.lists), 4)
 
-def test_list_name():
-    lm = ListManager(TEST_LISTS)
+        l1 = lm.get_list('erp@example.com')
+        l2 = lm.get_list('derp@example.com')
 
-    l = lm.get_list('derp@example.com')
-    assert(l.get_name() == 'derp@example.com')
+        self.assertEqual(l1, None)
+        self.assertNotEqual(l2, None)
 
-def test_list_senders():
-    lm = ListManager(TEST_LISTS)
+    def test_list_name(self):
+        lm = ListManager(TEST_LISTS)
 
-    l1 = lm.get_list('derp@example.com')
-    l2 = lm.get_list('derp1@example.com')
-    l3 = lm.get_list('derp2@example.com')
-    l4 = lm.get_list('derp3@example.com')
+        l = lm.get_list('derp@example.com')
+        self.assertEqual(l.get_name(), 'derp@example.com')
 
-    assert(len(l1.get_senders()) == 1)
-    assert(len(l2.get_senders()) == 4)
-    assert(len(l3.get_senders()) == 1)
-    assert(len(l4.get_senders()) == 4)
+    def test_list_senders(self):
+        lm = ListManager(TEST_LISTS)
 
-def test_list_recipients():
-    lm = ListManager(TEST_LISTS)
+        l1 = lm.get_list('derp@example.com')
+        l2 = lm.get_list('derp1@example.com')
+        l3 = lm.get_list('derp2@example.com')
+        l4 = lm.get_list('derp3@example.com')
 
-    l1 = lm.get_list('derp@example.com')
-    l2 = lm.get_list('derp1@example.com')
-    l3 = lm.get_list('derp2@example.com')
-    l4 = lm.get_list('derp3@example.com')
+        self.assertEqual(len(l1.get_senders()), 1)
+        self.assertEqual(len(l2.get_senders()), 4)
+        self.assertEqual(len(l3.get_senders()), 1)
+        self.assertEqual(len(l4.get_senders()), 4)
 
-    assert(len(l1.get_recipients()) == 1)
-    assert(len(l2.get_recipients()) == 1)
-    assert(len(l3.get_recipients()) == 4)
-    assert(len(l4.get_recipients()) == 4)
+    def test_list_recipients(self):
+        lm = ListManager(TEST_LISTS)
+
+        l1 = lm.get_list('derp@example.com')
+        l2 = lm.get_list('derp1@example.com')
+        l3 = lm.get_list('derp2@example.com')
+        l4 = lm.get_list('derp3@example.com')
+
+        self.assertEqual(len(l1.get_recipients()), 1)
+        self.assertEqual(len(l2.get_recipients()), 1)
+        self.assertEqual(len(l3.get_recipients()), 4)
+        self.assertEqual(len(l4.get_recipients()), 4)

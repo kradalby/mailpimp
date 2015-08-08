@@ -1,7 +1,6 @@
 import logging
 
-logging.basicConfig(filename='/var/log/mailpimp.log', level=logging.DEBUG)
-logger = logging.getLogger('MailPimpList')
+logger = logging.getLogger(__name__)
 
 
 class ListManager():
