@@ -4,11 +4,14 @@
 import configparser
 import email
 import logging
+import logging.config
 import os
 import sys
 
 from list import ListManager
 from mailgun import MailGunSMTP
+
+logger = logging.getLogger(__name__)
 
 CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
 LOGGING = {
@@ -27,20 +30,22 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join('mailpimp.log'),
+            'filename': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'mailpimp.log'),
             'formatter': 'verbose'
         },
     },
     'loggers': {
-        '*': {
+        __name__: {
             'handlers': ['file'],
-            'propagate': True,
+            'level': 'DEBUG',
+        },
+        'list': {
+            'handlers': ['file'],
             'level': 'DEBUG',
         },
     }
 }
-
-logger = logging.getLogger(__name__)
+logging.config.dictConfig(LOGGING)
 
 
 class MailPimp():
@@ -53,7 +58,6 @@ class MailPimp():
             self.config["mailgun"]["password"]
         )
 
-        logging.basicConfig(filename=self.config['log']['file'], level=logging.DEBUG)
         logger.debug(self.lm.get_lists())
 
         self.sender = sender
@@ -96,15 +100,11 @@ if __name__ == '__main__':
         sender = sys.argv[1]
         recipient = sys.argv[2]
 
-<<<<<<< HEAD
-        logger.debug('To: %s, From: %s' % (recipient, sender))
-=======
         logger.debug("######################")
         logger.debug("To: %s" % recipient)
         logger.debug("From: %s" % sender)
         logger.debug("Subject: %s" % mail["Subject"])
         logger.debug("######################\n")
->>>>>>> faff4c626946a2d91bd6e395869f530024c6f826
 
         mp = MailPimp(sender, recipient, mail)
         mp.distribute()
